@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relíquia Blox - Loja de Contas Blox Fruits</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark: #0f0f1a;
+            --darker: #050510;
+            --card: #1a1a2e;
+            --text: #ffffff;
+            --text-muted: #b2bec3;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Background Animation */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(108, 92, 231, 0.1) 0%, transparent 70%);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-50px, -50px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 15, 26, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.7); }
+            50% { box-shadow: 0 0 20px 10px rgba(108, 92, 231, 0.3); }
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .discord-btn {
+            background: linear-gradient(135deg, #5865F2, #4752C4);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 5% 40px;
+            position: relative;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--text), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(108, 92, 231, 0.5)); }
+            to { filter: drop-shadow(0 0 40px rgba(108, 92, 231, 0.8)); }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        /* Coupon Section */
+        .coupon-section {
+            background: rgba(108, 92, 231, 0.1);
+            border: 2px dashed var(--primary);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+
+        .coupon-section h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .coupon-input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .coupon-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid var(--primary);
+            background: var(--card);
+            color: var(--text);
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .coupon-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(253, 121, 168, 0.3);
+        }
+
+        .coupon-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .coupon-btn:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .coupon-message {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            height: 20px;
+        }
+
+        .coupon-success {
+            color: var(--success);
+        }
+
+        .coupon-error {
+            color: var(--danger);
+        }
+
+        /* Products Grid */
+        .products-container {
+            padding: 40px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            position: relative;
+        }
+
+        /* Character Decorations */
+        .character {
+            position: fixed;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+            filter: drop-shadow(0 0 20px rgba(108, 92, 231, 0.5));
+        }
+
+        .char-1 { top: 10%; left: 2%; width: 200px; animation: floatChar 6s ease-in-out infinite; }
+        .char-2 { top: 40%; right: 2%; width: 180px; animation: floatChar 8s ease-in-out infinite reverse; }
+        .char-3 { bottom: 20%; left: 5%; width: 150px; animation: floatChar 7s ease-in-out infinite; }
+        .char-4 { top: 60%; right: 5%; width: 160px; animation: floatChar 9s ease-in-out infinite reverse; }
+
+        @keyframes floatChar {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        /* Product Card */
+        .product-card {
+            background: var(--card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .product-card:hover::before {
+            left: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(108, 92, 231, 0.3);
+        }
+
+        .product-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .product-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-body {
+            padding: 25px;
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .product-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+        }
+
+        .product-features li:last-child {
+            border-bottom: none;
+        }
+
+        .product-features i {
+            color: var(--success);
+        }
+
+        .price-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        .original-price.show {
+            display: block;
+        }
+
+        .current-price {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--success);
+            text-shadow: 0 0 20px rgba(0, 184, 148, 0.4);
+        }
+
+        .discount-badge {
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .discount-badge.show {
+            display: inline-block;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--success), #00cec9);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 184, 148, 0.4);
+        }
+
+        .buy-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.2);
+            transform: rotate(30deg);
+            transition: all 0.6s;
+        }
+
+        .buy-btn:hover::after {
+            transform: rotate(30deg) translate(100%, 100%);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid var(--primary);
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.4s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            margin-bottom: 25px;
+        }
+
+        .modal-header i {
+            font-size: 4rem;
+            color: var(--warning);
+            margin-bottom: 15px;
+        }
+
+        .modal h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        /* Warning Box - NOVO */
+        .warning-box {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(231, 76, 60, 0.1));
+            border: 2px solid var(--danger);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .warning-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(231, 76, 60, 0.2), transparent);
+            animation: warningSlide 2s infinite;
+        }
+
+        @keyframes warningSlide {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .warning-box i {
+            font-size: 2rem;
+            color: var(--danger);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .warning-box p {
+            color: #ff7675;
+            font-weight: 700;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .warning-box small {
+            display: block;
+            margin-top: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 400;
+            text-transform: none;
+        }
+
+        .pix-key {
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px dashed var(--primary);
+            word-break: break-all;
+        }
+
+        .pix-key label {
+            display: block;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .pix-key code {
+            font-size: 1.1rem;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent);
+        }
+
+        .modal-info {
+            margin: 20px 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #5865F2, #4752C4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 5%;
+            background: rgba(0,0,0,0.3);
+            margin-top: 60px;
+            border-top: 2px solid var(--primary);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .social-links a:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h2 { font-size: 2rem; }
+            .products-grid { grid-template-columns: 1fr; }
+            .character { display: none; }
+            header { flex-direction: column; gap: 15px; }
+            .modal-actions { flex-direction: column; }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateX(400px);
+            transition: transform 0.4s;
+            z-index: 3000;
+            font-weight: 600;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Characters -->
+    <img src="https://kimi-web-img.moonshot.cn/img/www.clipartmax.com/f42b786425f624a1fb2842f5f06136f7a3276b74.png" class="character char-1" alt="Luffy">
+    <img src="https://kimi-web-img.moonshot.cn/img/www.clipartmax.com/c0cef15807b427c8640cba5d4c8718f6292bd8d9.png" class="character char-2" alt="Zoro">
+    <img src="https://kimi-web-img.moonshot.cn/img/p1.hiclipart.com/94c17031c2c03f02b9f9980d3f1da1e9382853a5.jpg" class="character char-3" alt="Luffy 2">
+    <img src="https://kimi-web-img.moonshot.cn/img/toppng.com/e18da0b33e4ac6822c57c96256388ec59e7e3f65.png" class="character char-4" alt="Zoro 2">
+
+    <header>
+        <div class="logo">
+            <img src="https://kimi-web-img.moonshot.cn/img/static.wikia.nocookie.net/c2ea51ca297a84bcae47e1be1f91e759fa377c7c" alt="Blox Fruits">
+            <h1>Relíquia Blox</h1>
+        </div>
+        <a href="https://discord.gg/dfGK3YPf9F" target="_blank" class="discord-btn">
+            <i class="fab fa-discord"></i>
+            Entrar no Discord
+        </a>
+    </header>
+
+    <section class="hero">
+        <h2>🎮 Contas Blox Fruits Premium</h2>
+        <p>As melh
